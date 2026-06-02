@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VEED Fabric Test</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="workspace" aria-labelledby="page-title">
+        <div class="intro">
+          <p class="eyebrow">fal.ai / veed/fabric-1.0</p>
+          <h1 id="page-title">Create a talking-head test video</h1>
+          <p>
+            Drop in one image and one audio file. This local Node app uploads them
+            to fal storage, runs Fabric at your chosen resolution, and shows the
+            final video URL.
+          </p>
+        </div>
+
+        <form id="generate-form" class="uploader">
+          <label class="drop-zone" data-kind="image">
+            <input id="image-input" name="image" type="file" accept="image/*" required />
+            <span class="drop-title">Image</span>
+            <span class="drop-copy">Drag an image here, or click to choose</span>
+            <span id="image-name" class="file-name">No image selected</span>
+          </label>
+
+          <label class="drop-zone" data-kind="audio">
+            <input id="audio-input" name="audio" type="file" accept="audio/*" required />
+            <span class="drop-title">Audio</span>
+            <span class="drop-copy">Drag audio here, or click to choose</span>
+            <span id="audio-name" class="file-name">No audio selected</span>
+          </label>
+
+          <fieldset class="resolution-control">
+            <legend>Resolution</legend>
+            <label>
+              <input type="radio" name="resolution" value="480p" checked />
+              <span>480p</span>
+            </label>
+            <label>
+              <input type="radio" name="resolution" value="720p" />
+              <span>720p</span>
+            </label>
+          </fieldset>
+
+          <button id="submit-button" type="submit">Generate 480p Video</button>
+        </form>
+      </section>
+
+      <section class="status-panel" aria-live="polite">
+        <div class="status-header">
+          <h2>Run Status</h2>
+          <span id="status-pill" class="pill">Idle</span>
+        </div>
+
+        <dl class="links">
+          <div>
+            <dt>Image URL</dt>
+            <dd id="image-url">Waiting for upload</dd>
+          </div>
+          <div>
+            <dt>Audio URL</dt>
+            <dd id="audio-url">Waiting for upload</dd>
+          </div>
+          <div>
+            <dt>Request ID</dt>
+            <dd id="request-id">Waiting for completion</dd>
+          </div>
+          <div>
+            <dt>Resolution</dt>
+            <dd id="selected-resolution">480p</dd>
+          </div>
+        </dl>
+
+        <div id="video-result" class="video-result" hidden>
+          <h2>Final Video URL</h2>
+          <a id="video-url" href="#" target="_blank" rel="noreferrer"></a>
+        </div>
+
+        <h2>Logs</h2>
+        <pre id="logs" class="logs">Ready.</pre>
+
+        <details>
+          <summary>Full result object</summary>
+          <pre id="result-json" class="result-json">Waiting for result.</pre>
+        </details>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

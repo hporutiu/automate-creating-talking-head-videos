@@ -1,0 +1,16 @@
+{
+  "name": "fabric-test",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Small Node.js test for VEED Fabric 1.0 through fal.ai.",
+  "scripts": {
+    "start": "node fabric-test.mjs",
+    "web": "node server.mjs"
+  },
+  "dependencies": {
+    "@fal-ai/client": "^1.7.1",
+    "express": "^4.19.2",
+    "multer": "^2.1.1"
+  }
+}
