@@ -48,12 +48,6 @@ function getSupportedRecordingMimeType() {
   return candidates.find((type) => MediaRecorder.isTypeSupported(type)) ?? "";
 }
 
-function getExtensionForMimeType(mimeType) {
-  if (mimeType.includes("mp4")) return "m4a";
-  if (mimeType.includes("ogg")) return "ogg";
-  return "webm";
-}
-
 function getActiveAudioFile() {
   if (activeAudioKind === "recording") return recordedAudioFile;
   if (activeAudioKind === "upload") return selectedAudioFile;
@@ -165,6 +159,76 @@ function formatFileSize(bytes) {
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
 
+async function convertRecordingToWav(recordingBlob) {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+
+  if (!AudioContextClass) {
+    throw new Error("This browser cannot convert the recording to WAV.");
+  }
+
+  const audioContext = new AudioContextClass();
+
+  try {
+    const arrayBuffer = await recordingBlob.arrayBuffer();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    return audioBufferToWavBlob(audioBuffer);
+  } finally {
+    await audioContext.close?.();
+  }
+}
+
+function audioBufferToWavBlob(audioBuffer) {
+  const numChannels = audioBuffer.numberOfChannels;
+  const sampleRate = audioBuffer.sampleRate;
+  const bytesPerSample = 2;
+  const blockAlign = numChannels * bytesPerSample;
+  const dataSize = audioBuffer.length * blockAlign;
+  const buffer = new ArrayBuffer(44 + dataSize);
+  const view = new DataView(buffer);
+  let offset = 0;
+
+  function writeString(value) {
+    for (let i = 0; i < value.length; i += 1) {
+      view.setUint8(offset, value.charCodeAt(i));
+      offset += 1;
+    }
+  }
+
+  writeString("RIFF");
+  view.setUint32(offset, 36 + dataSize, true);
+  offset += 4;
+  writeString("WAVE");
+  writeString("fmt ");
+  view.setUint32(offset, 16, true);
+  offset += 4;
+  view.setUint16(offset, 1, true);
+  offset += 2;
+  view.setUint16(offset, numChannels, true);
+  offset += 2;
+  view.setUint32(offset, sampleRate, true);
+  offset += 4;
+  view.setUint32(offset, sampleRate * blockAlign, true);
+  offset += 4;
+  view.setUint16(offset, blockAlign, true);
+  offset += 2;
+  view.setUint16(offset, bytesPerSample * 8, true);
+  offset += 2;
+  writeString("data");
+  view.setUint32(offset, dataSize, true);
+  offset += 4;
+
+  for (let i = 0; i < audioBuffer.length; i += 1) {
+    for (let channel = 0; channel < numChannels; channel += 1) {
+      const samples = audioBuffer.getChannelData(channel);
+      const sample = Math.max(-1, Math.min(1, samples[i]));
+      view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7fff, true);
+      offset += bytesPerSample;
+    }
+  }
+
+  return new Blob([buffer], { type: "audio/wav" });
+}
+
 function setupDropZone(input, label) {
   const zone = input.closest(".drop-zone");
 
@@ -246,28 +310,38 @@ async function startRecording() {
       if (event.data.size > 0) recordedChunks.push(event.data);
     });
 
-    mediaRecorder.addEventListener("stop", () => {
+    mediaRecorder.addEventListener("stop", async () => {
       stream.getTracks().forEach((track) => track.stop());
 
-      recordedAudioBlob = new Blob(recordedChunks, {
-        type: mediaRecorder.mimeType || "audio/webm",
-      });
+      try {
+        const browserRecordingBlob = new Blob(recordedChunks, {
+          type: mediaRecorder.mimeType || "audio/webm",
+        });
 
-      const extension = getExtensionForMimeType(recordedAudioBlob.type);
-      recordedAudioFile = new File([recordedAudioBlob], `recording.${extension}`, {
-        type: recordedAudioBlob.type,
-      });
-      recordedAudioUrl = URL.createObjectURL(recordedAudioBlob);
+        setRecordingStatus("Converting", "ready");
+        recordedAudioBlob = await convertRecordingToWav(browserRecordingBlob);
+        recordedAudioFile = new File([recordedAudioBlob], "recording.wav", {
+          type: "audio/wav",
+        });
+        recordedAudioUrl = URL.createObjectURL(recordedAudioBlob);
 
-      recordingPreview.src = recordedAudioUrl;
-      recordingPreview.hidden = false;
-      useRecordingButton.disabled = false;
-      rerecordAudioButton.disabled = false;
-      startRecordingButton.disabled = false;
-      stopRecordingButton.disabled = true;
-      isRecording = false;
-      setRecordingStatus("Preview ready", "ready");
-      updateGenerateButtonState();
+        recordingPreview.src = recordedAudioUrl;
+        recordingPreview.hidden = false;
+        useRecordingButton.disabled = false;
+        rerecordAudioButton.disabled = false;
+        setRecordingStatus("Preview ready", "ready");
+      } catch (error) {
+        clearRecording();
+        setRecordingStatus("Conversion failed", "error");
+        setRecordingError(
+          "The browser recording could not be converted to WAV. Please try again or upload an audio file.",
+        );
+      } finally {
+        startRecordingButton.disabled = false;
+        stopRecordingButton.disabled = true;
+        isRecording = false;
+        updateGenerateButtonState();
+      }
     });
 
     mediaRecorder.start();

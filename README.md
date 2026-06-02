@@ -77,6 +77,7 @@ http://localhost:3000
 ## Notes
 
 - Your `FAL_KEY` is read from the server environment and is never sent to the browser.
-- Browser recordings use the MediaRecorder API, usually as WebM/Opus.
+- Browser recordings use the MediaRecorder API, then the app converts them to
+  `recording.wav` before upload so fal/Fabric sees a plain audio file.
 - If microphone access is blocked or unsupported, upload an audio file instead.
 - `.env` files are ignored by git. Use `.env.example` only as a placeholder reference.
