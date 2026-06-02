@@ -1,24 +1,36 @@
 # Automate Creating Talking Head Videos
 
-A small Node.js web app for automating talking-head video generation with the
-`veed/fabric-1.0` model through fal.ai.
+A compact Node.js demo app for generating talking-head videos with
+`veed/fabric-1.0` through fal.ai.
 
-Upload an image and an audio file through the browser, choose `480p` or `720p`, and the app will:
-
-- Upload both files to fal storage with explicit `fal.storage.upload()` calls
-- Send the returned fal.media URLs as `image_url` and `audio_url`
-- Run `veed/fabric-1.0`
-- Stream queue updates and logs while generation runs
-- Show the uploaded URLs, request ID, full result JSON, and final generated video URL
+Upload a portrait image, either upload an audio file or record your voice in the
+browser, then generate a video with live queue updates.
 
 ![Automate creating talking head videos app screenshot](docs/app-screenshot.png)
+
+## Why This App Exists
+
+Fabric expects publicly accessible media URLs for `image_url` and `audio_url`.
+That can make first-time API testing awkward when your files are sitting on your
+laptop.
+
+This demo removes that friction: it uploads your selected image and audio to fal
+storage, sends those public fal.media URLs to Fabric, and shows the final result
+in one local browser flow.
 
 ## Requirements
 
 - Node.js 20 or newer
-- A fal.ai API key
+- A fal.ai API key with credits for VEED/Fabric usage
 
-## Setup
+## Quick Start
+
+Clone the repo:
+
+```bash
+git clone https://github.com/hporutiu/automate-creating-talking-head-videos.git
+cd automate-creating-talking-head-videos
+```
 
 Install dependencies:
 
@@ -32,29 +44,39 @@ Set your fal.ai API key:
 export FAL_KEY="your_fal_api_key_here"
 ```
 
-Start the app:
+Run locally:
 
 ```bash
 npm start
 ```
 
-Open the local app:
+Open:
 
 ```text
 http://localhost:3000
 ```
 
-## Usage
+## Demo Flow
 
-1. Drag or choose an image file.
-2. Drag or choose an audio file.
-3. Select `480p` or `720p`.
-4. Click `Generate`.
-5. Watch the live logs and open the final video URL when it completes.
+1. Upload or drag in a clear portrait image.
+2. Add audio in one of two ways:
+   - Upload an audio file such as MP3, WAV, M4A, or WebM.
+   - Record your voice directly in the browser, preview it, then click
+     `Use recording`.
+3. Choose `480p` or `720p`.
+4. Click generate.
+5. Watch the live logs and open the final video URL when the run completes.
+
+## Tips For Best Results
+
+- Use a clear, front-facing, well-lit image.
+- Keep first tests short to save credits and speed up iteration.
+- Trim long silences if you upload an existing audio file.
+- Start with `480p` while testing, then switch to `720p` for better output.
 
 ## Notes
 
 - Your `FAL_KEY` is read from the server environment and is never sent to the browser.
-- Uploaded files are sent from the browser to your local Node server, then uploaded to fal storage by the server.
-- The app validates that `FAL_KEY` is present before starting a generation request.
+- Browser recordings use the MediaRecorder API, usually as WebM/Opus.
+- If microphone access is blocked or unsupported, upload an audio file instead.
 - `.env` files are ignored by git. Use `.env.example` only as a placeholder reference.

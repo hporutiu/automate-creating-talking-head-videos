@@ -166,6 +166,120 @@ p {
   pointer-events: none;
 }
 
+.recorder {
+  display: grid;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  background: #fbf8f3;
+}
+
+.recorder-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.recorder-header p {
+  margin-top: 4px;
+  font-size: 0.94rem;
+}
+
+.recording-status {
+  flex: 0 0 auto;
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0 10px;
+  background: #ede6dc;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.recording-status.is-recording {
+  background: #f8dddd;
+  color: var(--danger);
+}
+
+.recording-status.is-recording::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-right: 7px;
+  border-radius: 999px;
+  background: var(--danger);
+}
+
+.recording-status.is-ready {
+  background: #dff3e9;
+  color: var(--success);
+}
+
+.recording-status.is-error {
+  background: #f8dddd;
+  color: var(--danger);
+}
+
+.recorder-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.secondary-button {
+  min-height: 42px;
+  border: 1px solid var(--line);
+  background: #fffdfa;
+  color: var(--ink);
+  box-shadow: none;
+  font-size: 0.9rem;
+}
+
+.secondary-button:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.danger-button:hover {
+  border-color: var(--danger);
+  background: #f8dddd;
+  color: var(--danger);
+}
+
+.recording-preview {
+  width: 100%;
+}
+
+.inline-error {
+  color: var(--danger);
+  font-size: 0.92rem;
+}
+
+.source-summary {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: #faf7f1;
+}
+
+.source-summary span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.source-summary strong {
+  overflow-wrap: anywhere;
+}
+
 .resolution-control {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -242,6 +356,7 @@ button:hover {
 button:disabled {
   cursor: not-allowed;
   opacity: 0.65;
+  box-shadow: none;
 }
 
 .status-panel {
@@ -383,6 +498,12 @@ summary {
   font-weight: 800;
 }
 
+.demo-note {
+  border-left: 3px solid var(--accent);
+  padding-left: 12px;
+  font-size: 0.92rem;
+}
+
 @media (max-width: 860px) {
   .shell {
     grid-template-columns: 1fr;
@@ -402,6 +523,14 @@ summary {
   h1 {
     max-width: none;
     font-size: clamp(2.1rem, 11vw, 3.5rem);
+  }
+
+  .recorder-header {
+    flex-direction: column;
+  }
+
+  .recorder-actions {
+    grid-template-columns: 1fr 1fr;
   }
 }
 

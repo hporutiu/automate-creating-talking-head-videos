@@ -16,8 +16,8 @@
           </div>
           <h1 id="page-title">Automate creating talking head videos</h1>
           <p>
-            Upload a portrait image and a voice track, then generate a talking-head
-            video with live fal queue updates.
+            Upload a clear portrait, add a short voice track by file or microphone,
+            then generate a talking-head video with live fal queue updates.
           </p>
         </div>
 
@@ -26,16 +26,43 @@
             <label class="drop-zone" data-kind="image">
               <input id="image-input" name="image" type="file" accept="image/*" required />
               <span class="drop-title">Image</span>
-              <span class="drop-copy">Drag an image here, or click to choose</span>
+              <span class="drop-copy">Use a front-facing, well-lit portrait image.</span>
               <span id="image-name" class="file-name">No image selected</span>
             </label>
 
             <label class="drop-zone" data-kind="audio">
-              <input id="audio-input" name="audio" type="file" accept="audio/*" required />
-              <span class="drop-title">Audio</span>
-              <span class="drop-copy">Drag audio here, or click to choose</span>
+              <input id="audio-input" name="audio" type="file" accept="audio/*" />
+              <span class="drop-title">Upload audio</span>
+              <span class="drop-copy">Choose MP3, WAV, M4A, or WebM audio.</span>
               <span id="audio-name" class="file-name">No audio selected</span>
             </label>
+          </div>
+
+          <section class="recorder" aria-labelledby="recorder-title">
+            <div class="recorder-header">
+              <div>
+                <h2 id="recorder-title">Record audio</h2>
+                <p>Record a quick browser voice clip for the demo.</p>
+              </div>
+              <span id="recording-status" class="recording-status">Ready</span>
+            </div>
+
+            <div class="recorder-actions">
+              <button id="start-recording" class="secondary-button" type="button">Start recording</button>
+              <button id="stop-recording" class="secondary-button danger-button" type="button" disabled>
+                Stop recording
+              </button>
+              <button id="rerecord-audio" class="secondary-button" type="button" disabled>Re-record</button>
+              <button id="use-recording" class="secondary-button" type="button" disabled>Use recording</button>
+            </div>
+
+            <audio id="recording-preview" class="recording-preview" controls hidden></audio>
+            <p id="recording-error" class="inline-error" hidden></p>
+          </section>
+
+          <div class="source-summary">
+            <span>Audio source</span>
+            <strong id="active-audio-source">Choose an audio file or use a recording</strong>
           </div>
 
           <fieldset class="resolution-control">
@@ -51,6 +78,10 @@
           </fieldset>
 
           <button id="submit-button" type="submit">Generate 480p Video</button>
+          <p id="form-error" class="inline-error" hidden></p>
+          <p class="demo-note">
+            API usage requires fal/VEED credits. Short clips are best for first tests.
+          </p>
         </form>
       </section>
 
