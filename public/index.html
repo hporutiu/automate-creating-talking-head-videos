@@ -3,36 +3,40 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>VEED Fabric Test</title>
+    <title>Automate Creating Talking Head Videos</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <main class="shell">
       <section class="workspace" aria-labelledby="page-title">
         <div class="intro">
-          <p class="eyebrow">fal.ai / veed/fabric-1.0</p>
-          <h1 id="page-title">Create a talking-head test video</h1>
+          <div class="brand-row">
+            <p class="eyebrow">fal.ai / veed/fabric-1.0</p>
+            <span class="model-chip">480p or 720p</span>
+          </div>
+          <h1 id="page-title">Automate creating talking head videos</h1>
           <p>
-            Drop in one image and one audio file. This local Node app uploads them
-            to fal storage, runs Fabric at your chosen resolution, and shows the
-            final video URL.
+            Upload a portrait image and a voice track, then generate a talking-head
+            video with live fal queue updates.
           </p>
         </div>
 
         <form id="generate-form" class="uploader">
-          <label class="drop-zone" data-kind="image">
-            <input id="image-input" name="image" type="file" accept="image/*" required />
-            <span class="drop-title">Image</span>
-            <span class="drop-copy">Drag an image here, or click to choose</span>
-            <span id="image-name" class="file-name">No image selected</span>
-          </label>
+          <div class="input-grid">
+            <label class="drop-zone" data-kind="image">
+              <input id="image-input" name="image" type="file" accept="image/*" required />
+              <span class="drop-title">Image</span>
+              <span class="drop-copy">Drag an image here, or click to choose</span>
+              <span id="image-name" class="file-name">No image selected</span>
+            </label>
 
-          <label class="drop-zone" data-kind="audio">
-            <input id="audio-input" name="audio" type="file" accept="audio/*" required />
-            <span class="drop-title">Audio</span>
-            <span class="drop-copy">Drag audio here, or click to choose</span>
-            <span id="audio-name" class="file-name">No audio selected</span>
-          </label>
+            <label class="drop-zone" data-kind="audio">
+              <input id="audio-input" name="audio" type="file" accept="audio/*" required />
+              <span class="drop-title">Audio</span>
+              <span class="drop-copy">Drag audio here, or click to choose</span>
+              <span id="audio-name" class="file-name">No audio selected</span>
+            </label>
+          </div>
 
           <fieldset class="resolution-control">
             <legend>Resolution</legend>
@@ -52,7 +56,10 @@
 
       <section class="status-panel" aria-live="polite">
         <div class="status-header">
-          <h2>Run Status</h2>
+          <div>
+            <p class="eyebrow">Output</p>
+            <h2>Run Status</h2>
+          </div>
           <span id="status-pill" class="pill">Idle</span>
         </div>
 

@@ -1,9 +1,9 @@
 {
-  "name": "fabric-test",
+  "name": "automate-creating-talking-head-videos",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Small Node.js test for VEED Fabric 1.0 through fal.ai.",
+  "description": "Upload an image and audio file to create talking-head videos with VEED Fabric through fal.ai.",
   "scripts": {
     "start": "node fabric-test.mjs",
     "web": "node server.mjs"

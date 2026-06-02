@@ -1,6 +1,7 @@
-# VEED Fabric fal.ai Tester
+# Automate Creating Talking Head Videos
 
-A small Node.js web app for testing the `veed/fabric-1.0` model through fal.ai.
+A small Node.js web app for automating talking-head video generation with the
+`veed/fabric-1.0` model through fal.ai.
 
 Upload an image and an audio file through the browser, choose `480p` or `720p`, and the app will:
 
@@ -10,7 +11,7 @@ Upload an image and an audio file through the browser, choose `480p` or `720p`, 
 - Stream queue updates and logs while generation runs
 - Show the uploaded URLs, request ID, full result JSON, and final generated video URL
 
-![App screenshot](docs/app-screenshot.png)
+![Automate creating talking head videos app screenshot](docs/app-screenshot.png)
 
 ## Requirements
 

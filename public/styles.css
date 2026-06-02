@@ -1,14 +1,16 @@
 :root {
   color-scheme: light;
-  --bg: #f7f4ef;
+  --bg: #f4f1ec;
   --ink: #17201c;
   --muted: #66706b;
   --line: #d8d0c4;
   --panel: #fffdfa;
   --accent: #176b87;
   --accent-strong: #0f4f63;
+  --accent-soft: #e6f4f6;
   --success: #1f7a4d;
   --danger: #b83b3b;
+  --shadow: 0 24px 80px rgba(36, 29, 20, 0.08);
 }
 
 * {
@@ -31,11 +33,11 @@ body {
 }
 
 .shell {
-  width: min(1120px, calc(100% - 32px));
+  width: min(1280px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 48px 0;
+  padding: 40px 0;
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(340px, 1.05fr);
+  grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
   gap: 24px;
   overflow: hidden;
 }
@@ -46,7 +48,15 @@ body {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.workspace {
+  padding: 32px;
+}
+
+.status-panel {
+  padding: 32px;
 }
 
 .intro {
@@ -54,6 +64,13 @@ body {
   display: grid;
   gap: 12px;
   margin-bottom: 28px;
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .eyebrow {
@@ -65,6 +82,17 @@ body {
   text-transform: uppercase;
 }
 
+.model-chip {
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #faf7f1;
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
 h1,
 h2,
 p {
@@ -72,8 +100,9 @@ p {
 }
 
 h1 {
-  font-size: clamp(2rem, 5vw, 4rem);
-  line-height: 0.96;
+  max-width: 12ch;
+  font-size: clamp(2.4rem, 5vw, 4.7rem);
+  line-height: 0.94;
   letter-spacing: 0;
   overflow-wrap: anywhere;
 }
@@ -91,16 +120,22 @@ p {
 .uploader {
   min-width: 0;
   display: grid;
-  gap: 16px;
+  gap: 18px;
+}
+
+.input-grid {
+  min-width: 0;
+  display: grid;
+  gap: 14px;
 }
 
 .drop-zone {
   min-width: 0;
-  min-height: 172px;
+  min-height: 160px;
   display: grid;
   align-content: center;
   gap: 8px;
-  border: 2px dashed var(--line);
+  border: 1px dashed #cfc4b4;
   border-radius: 8px;
   padding: 24px;
   background: #fbf8f3;
@@ -114,7 +149,7 @@ p {
 .drop-zone:hover,
 .drop-zone.is-dragging {
   border-color: var(--accent);
-  background: #eef7f8;
+  background: var(--accent-soft);
 }
 
 .drop-zone.has-file {
@@ -134,7 +169,7 @@ p {
 .resolution-control {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
   margin: 0;
   padding: 0;
   border: 0;
@@ -150,7 +185,7 @@ p {
 }
 
 .resolution-control label {
-  min-height: 48px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,7 +203,7 @@ p {
 
 .resolution-control label:has(input:checked) {
   border-color: var(--accent);
-  background: #dff0f2;
+  background: var(--accent-soft);
   color: var(--accent-strong);
 }
 
@@ -189,7 +224,7 @@ p {
 }
 
 button {
-  min-height: 52px;
+  min-height: 56px;
   border: 0;
   border-radius: 8px;
   background: var(--accent);
@@ -197,6 +232,7 @@ button {
   font: inherit;
   font-weight: 800;
   cursor: pointer;
+  box-shadow: 0 14px 28px rgba(23, 107, 135, 0.18);
 }
 
 button:hover {
@@ -212,7 +248,8 @@ button:disabled {
   min-width: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 20px;
+  align-content: start;
+  gap: 22px;
   overflow: hidden;
 }
 
@@ -221,6 +258,7 @@ button:disabled {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  padding-bottom: 4px;
 }
 
 .pill {
@@ -253,16 +291,24 @@ button:disabled {
 .links {
   min-width: 0;
   display: grid;
-  gap: 12px;
+  gap: 0;
   margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .links div {
   min-width: 0;
   display: grid;
   gap: 4px;
-  padding-bottom: 12px;
+  padding: 14px 16px;
+  background: #fbf8f3;
   border-bottom: 1px solid var(--line);
+}
+
+.links div:last-child {
+  border-bottom: 0;
 }
 
 dt {
@@ -340,11 +386,27 @@ summary {
 @media (max-width: 860px) {
   .shell {
     grid-template-columns: 1fr;
-    padding: 24px 0;
+    padding: 16px 0;
   }
 
   .workspace,
   .status-panel {
     padding: 20px;
+  }
+
+  .brand-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  h1 {
+    max-width: none;
+    font-size: clamp(2.1rem, 11vw, 3.5rem);
+  }
+}
+
+@media (min-width: 1180px) {
+  .input-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
